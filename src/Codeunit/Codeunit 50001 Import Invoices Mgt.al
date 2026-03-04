@@ -802,6 +802,7 @@ codeunit 50001 "Import Invoices Mgt."
         SalesHeader: Record "Sales Header";
         SalesDocumentType: Enum "Sales Document Type";
         ReasonCode: Code[10];
+        PaymentTermsCode: Code[10];
     begin
         case pSalesInvoiceToImport."Reason Code" of
             '201':
@@ -829,10 +830,13 @@ codeunit 50001 "Import Invoices Mgt."
         SalesHeader.Insert(true);
 
         SalesHeader.Validate("Sell-to Customer No.");
+
         SalesHeader."Document Date" := pSalesInvoiceToImport."Document Date";
+        SalesHeader."Shipment Date" := pSalesInvoiceToImport."Document Date";
         SalesHeader."Operation Occurred Date" := pSalesInvoiceToImport."Posting Date";
         SalesHeader."VAT Reporting Date" := pSalesInvoiceToImport."Posting Date";
         SalesHeader."Order Date" := pSalesInvoiceToImport."Posting Date";
+        SalesHeader.Validate("Payment Terms Code");
         SalesHeader.Validate("Posting No.", pSalesInvoiceToImport.GenerateBCPostingNo());
         SalesHeader.Modify(true);
 
@@ -1014,6 +1018,7 @@ codeunit 50001 "Import Invoices Mgt."
         PurchaseDocumentType: Enum "Purchase Document Type";
         VATBusinessPostingGroup: Record "VAT Business Posting Group";
         ReasonCode: Code[10];
+        PaymentTermsCode: Code[10];
     begin
         case pPurchaseInvoiceToImport."Reason Code" of
             '301', '305', '307', '310', '385', '386', '387':
@@ -1056,9 +1061,11 @@ codeunit 50001 "Import Invoices Mgt."
         end;
 
         PurchaseHeader."Document Date" := pPurchaseInvoiceToImport."Document Date";
+        PurchaseHeader."Expected Receipt Date" := pPurchaseInvoiceToImport."Document Date";
         PurchaseHeader."Order Date" := pPurchaseInvoiceToImport."Posting Date";
         PurchaseHeader."Operation Occurred Date" := pPurchaseInvoiceToImport."Posting Date";
         PurchaseHeader."VAT Reporting Date" := pPurchaseInvoiceToImport."Posting Date";
+        PurchaseHeader.Validate("Payment Terms Code");
         PurchaseHeader.Validate("Posting No.", pPurchaseInvoiceToImport.GenerateBCPostingNo());
         PurchaseHeader.Validate("Check Total", pPurchaseInvoiceToImport.Amount);
         PurchaseHeader.Modify(true);
