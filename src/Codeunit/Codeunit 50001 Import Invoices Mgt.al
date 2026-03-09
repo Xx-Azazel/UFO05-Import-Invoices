@@ -866,6 +866,7 @@ codeunit 50001 "Import Invoices Mgt."
 
                 Clear(SalesLine);
                 SalesLine.Init();
+                SalesLine.SetHasBeenShown();
                 SalesLine.Validate("Document Type", pSalesHeader."Document Type");
                 SalesLine.Validate("Document No.", pSalesHeader."No.");
                 SalesLine."Line No." := NewLineNo;
